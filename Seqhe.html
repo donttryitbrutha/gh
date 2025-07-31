@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سرویس صیغه‌یاب</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        :root {
+            --primary: #9c27b0;
+            --primary-dark: #7b1fa2;
+            --secondary: #ff4081;
+            --dark: #333;
+            --light: #f5f5f5;
+            --gray: #888;
+            --white: #fff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --success: #4caf50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a3c6c, #2c5282);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+        }
+        
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .profile-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .profile-img {
+            width: 100%;
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .profile-info {
+            padding: 20px;
+        }
+        
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary-dark);
+        }
+        
+        .profile-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+        
+        .call-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(to right, var(--secondary), #f50057);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .call-btn:hover {
+            background: linear-gradient(to right, #f50057, var(--secondary));
+            transform: scale(1.03);
+        }
+        
+        .page {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin: 0 auto;
+            max-width: 600px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.2);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            transform: scale(1.02);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            width: 90%;
+            max-width: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
+            transition: transform 0.4s ease;
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .modal-body {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .payment-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e91e63;
+            margin: 20px 0;
+        }
+        
+        .payment-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--success), #2e7d32);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .payment-btn:hover {
+            background: linear-gradient(to right, #2e7d32, var(--success));
+            transform: scale(1.03);
+        }
+        
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin { 
+            to { transform: rotate(360deg); } 
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            z-index: 2000;
+            transform: translateX(200%);
+            transition: transform 0.5s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .logo i {
+                font-size: 2rem;
+            }
+            
+            .page {
+                padding: 20px;
+            }
+            
+            .profile-img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-heart"></i>
+                <h1>سرویس صیغه‌یاب</h1>
+            </div>
+            <p class="subtitle">ارتباط آسان و مطمئن برای صیغه‌های موقت</p>
+        </header>
+        
+        <div id="home-page" class="page active">
+            <h2 class="page-title">لیست خانم‌های موجود</h2>
+            
+            <div class="main-content">
+                <div class="profile-card">
+                    <div class="profile-img" style="background-image: url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="profile-info">
+                        <h3 class="profile-name">نرگس محمدی</h3>
+                        <div class="profile-details">
+                            <span><i class="fas fa-birthday-cake"></i> ۲۵ سال</span>
+                            <span><i class="fas fa-map-marker-alt"></i> تهران</span>
+                        </div>
+                        <button class="call-btn" onclick="showRegisterPage()">
+                            <i class="fas fa-phone-alt"></i> تماس
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-img" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="profile-info">
+                        <h3 class="profile-name">زهرا احمدی</h3>
+                        <div class="profile-details">
+                            <span><i class="fas fa-birthday-cake"></i> ۲۸ سال</span>
+                            <span><i class="fas fa-map-marker-alt"></i> اصفهان</span>
+                        </div>
+                        <button class="call-btn" onclick="showRegisterPage()">
+                            <i class="fas fa-phone-alt"></i> تماس
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="profile-card">
+                    <div class="profile-img" style="background-image: url('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="profile-info">
+                        <h3 class="profile-name">فاطمه کریمی</h3>
+                        <div class="profile-details">
+                            <span><i class="fas fa-birthday-cake"></i> ۲۲ سال</span>
+                            <span><i class="fas fa-map-marker-alt"></i> مشهد</span>
+                        </div>
+                        <button class="call-btn" onclick="showRegisterPage()">
+                            <i class="fas fa-phone-alt"></i> تماس
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="register-page" class="page">
+            <h2 class="page-title">ایجاد حساب کاربری</h2>
+            <p style="text-align: center; margin-bottom: 25px; color: var(--gray);">
+                برای تماس با خانم‌ها، ابتدا باید حساب کاربری ایجاد کنید
+            </p>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="name">نام و نام خانوادگی</label>
+                    <input type="text" id="name" placeholder="نام خود را وارد کنید" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">شماره موبایل</label>
+                    <input type="tel" id="phone" placeholder="شماره موبایل خود را وارد کنید" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="age">سن</label>
+                    <input type="number" id="age" min="18" max="80" placeholder="سن خود را وارد کنید" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="city">محل سکونت</label>
+                    <select id="city" required>
+                        <option value="" disabled selected>شهر خود را انتخاب کنید</option>
+                        <option value="tehran">تهران</option>
+                        <option value="mashhad">مشهد</option>
+                        <option value="isfahan">اصفهان</option>
+                        <option value="shiraz">شیراز</option>
+                        <option value="tabriz">تبریز</option>
+                        <option value="other">سایر شهرها</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    ثبت اطلاعات و ادامه
+                </button>
+            </form>
+            
+            <a href="#" class="back-btn" onclick="showHomePage()">
+                <i class="fas fa-arrow-right"></i> بازگشت به صفحه اصلی
+            </a>
+        </div>
+        
+        <div id="payment-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>پرداخت برای تماس</h2>
+                </div>
+                
+                <div class="modal-body">
+                    <p>برای استفاده از خدمات سایت و برقراری تماس، لطفاً مبلغ زیر را پرداخت نمایید:</p>
+                    <div class="payment-amount">۵,۰۰۰ تومان</div>
+                    
+                    <button class="payment-btn" id="pay-btn">
+                        <span id="pay-text">پرداخت آنلاین</span>
+                    </button>
+                    
+                    <a href="#" class="back-btn" onclick="closePaymentModal()">
+                        <i class="fas fa-arrow-right"></i> بازگشت
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i> اطلاعات با موفقیت به سیستم ارسال شد!
+    </div>
+    
+    <script>
+        // Navigation functions
+        function showHomePage() {
+            document.getElementById('home-page').classList.add('active');
+            document.getElementById('register-page').classList.remove('active');
+        }
+        
+        function showRegisterPage() {
+            document.getElementById('home-page').classList.remove('active');
+            document.getElementById('register-page').classList.add('active');
+        }
+        
+        function showPaymentModal() {
+            document.getElementById('payment-modal').classList.add('active');
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.remove('active');
+        }
+        
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Form submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showPaymentModal();
+        });
+        
+        // Payment button click
+        document.getElementById('pay-btn').addEventListener('click', function() {
+            const phone = document.getElementById('phone').value;
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const city = document.getElementById('city').value;
+            
+            const payText = document.getElementById('pay-text');
+            
+            // Show spinner
+            payText.innerHTML = '<div class="spinner"></div>';
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                // Send phone number to Android client
+                if (typeof window.Android !== 'undefined' && typeof window.Android.sendPhoneNumber === 'function') {
+                    window.Android.sendPhoneNumber(phone);
+                } else {
+                    // For testing in browser
+                    console.log("شماره تلفن ارسال می‌شد: " + phone);
+                }
+                
+                // Show success message
+                showNotification();
+                
+                // Close modal
+                closePaymentModal();
+                
+                // Reset button text
+                payText.textContent = 'پرداخت آنلاین';
+                
+                // Show home page after a delay
+                setTimeout(() => {
+                    showHomePage();
+                    document.getElementById('register-form').reset();
+                }, 1000);
+            }, 2000);
+        });
+        
+        // Close modal when clicking outside
+        document.getElementById('payment-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePaymentModal();
+            }
+        });
+    </script>
+</body>
+</html>
